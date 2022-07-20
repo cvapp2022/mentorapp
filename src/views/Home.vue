@@ -1,9 +1,6 @@
 <template>
   <b-container>
-    <div class="p-4 d-flex">
-      <b-input v-model="test1"></b-input>
-      <b-button variant="primary" @click="join()">test</b-button>
-    </div>
+    <router-link :to="{name:'mentorLogin'}" >Login</router-link>
   </b-container>
 </template>
 

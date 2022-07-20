@@ -48,8 +48,8 @@ const actions = {
 
     sceduleMeet({dispatch},data){
 
-        var url = process.env.VUE_APP_BASEURL + '/Mn/Meet/' ;
-        axios.post(url,data).then((resp) => {
+        var url = process.env.VUE_APP_BASEURL + '/Mn/Meet/'+data.MeetIdI ;
+        axios.put(url,data).then((resp) => {
 
             if(resp.data.success){
                 dispatch("getRequests")
@@ -58,8 +58,16 @@ const actions = {
 
 
          })
+    },
+    socket_mentorAddedToProgram({dispatch}){
+        //MENTOR_ADDED_TO_PROGRAM
+        console.log('mentor addedd to prgram')
+        dispatch('getRequests')
 
-
+    },
+    socket_mentorRemovedFromProgram({dispatch}){
+        console.log('mentor removed from program')
+        dispatch('getRequests')
     }
 
 }

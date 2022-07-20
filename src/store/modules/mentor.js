@@ -1,17 +1,19 @@
 import axios from "axios";
 import VueCookie from 'vue-cookies';
-import CryptoJS from 'crypto-js'
+// import CryptoJS from 'crypto-js'
 import router from '../../router/index'
-
+//import $socket from '../../socket-instance';
 
 
 const state = {
     Mentor: {},
+    Notification:{},
     MentorToken: {},
 }
 
 const getters = {
     Mentor: state => state.Mentor,
+    Notification:state=>state.Notification,
     MentorToken: state => state.MentorToken
 }
 
@@ -27,23 +29,26 @@ const actions = {
             if (resp.data.success) {
 
                 //encrypt token 
-                const key = process.env.VUE_APP_ENCKEY //
-                const iv = process.env.VUE_APP_ENCIV // 
+                // const key = process.env.VUE_APP_ENCKEY //
+                // const iv = process.env.VUE_APP_ENCIV // 
                 const txt = resp.data.payload.token;
-                const cipher = CryptoJS.AES.encrypt(txt, key, {
-                    iv: CryptoJS.enc.Utf8.parse(iv),
-                    mode: CryptoJS.mode.CBC
-                })
+                // const cipher = CryptoJS.AES.encrypt(txt, key, {
+                //     iv: CryptoJS.enc.Utf8.parse(iv),
+                //     mode: CryptoJS.mode.CBC
+                // })
 
                 commit('Mentor', resp.data.payload.mentor)
-                commit('MentorToken', cipher.toString())
+                console.log(resp.data.payload.mentor.MentorNotif)
+                commit('Notification',resp.data.payload.mentor.MentorNotif)
+                commit('MentorToken', txt)
                 // commit('Requests',resp.data.payload.mentor.MentorRequests)
-                dispatch('getRequests')
-
-                VueCookie.set('mentorToken', cipher.toString(), { expires: "1h" })
-
+                
+                VueCookie.set('mentorToken', txt, { expires: "1h" })
+                
                 //Set Token Default
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + txt;
+                dispatch('getRequests')
+                //$socket.emit("MENTOR_JOIN",resp.data.payload.mentor)
                 //dispatch('getProfile')
 
                 //redirect to profile view 
@@ -57,12 +62,12 @@ const actions = {
     LoginMentorByCookie({ commit, dispatch }, data) {
 
 
-        const key = process.env.VUE_APP_ENCKEY //
+       // const key = process.env.VUE_APP_ENCKEY //
 
         //Dcrypt Token
-        var dcrypted = CryptoJS.AES.decrypt(data.Token, key).toString(CryptoJS.enc.Utf8);
+       // var dcrypted = CryptoJS.AES.decrypt(data.Token, key).toString(CryptoJS.enc.Utf8);
 
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + dcrypted;
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + data.Token;
 
         //get mentor data 
         var url = process.env.VUE_APP_BASEURL + '/mn/mentor/';
@@ -71,20 +76,17 @@ const actions = {
             if (resp.data.success) {
 
                 commit('Mentor', resp.data.payload)
-                commit('MentorToken', dcrypted)
+                commit('MentorToken', data.Token)
                 dispatch('getRequests')
             }
 
         })
-
-
     },
-
-
 }
 
 const mutations = {
     Mentor: (state, Mentor) => (state.Mentor = Mentor),
+    Notification:(state, Notification) => (state.Notification = Notification),
     MentorToken: (state, MentorToken) => (state.MentorToken = MentorToken),
 }
 

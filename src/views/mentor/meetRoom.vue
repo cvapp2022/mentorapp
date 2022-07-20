@@ -1,78 +1,27 @@
 <template>
   <div class="container-fluid my-3">
     <div class="row">
-      <div class="col-md-7">
-        <div class="">
-          <WebRTC
-            ref="webrtc"
-            width="100%"
-            :roomId="roomId"
-            :socketURL="'http://127.0.0.1:5000'"
-            :enableLogs="true"
-            v-on:joined-room="logEvent"
-            v-on:left-room="logEvent"
-            v-on:opened-room="logEvent"
-            v-on:share-started="logEvent"
-            v-on:share-stopped="logEvent"
-            @error="onError"
-          />
-          <button type="button" class="btn btn-primary" @click="onJoin">
-            Join
-          </button>
-          <button type="button" class="btn btn-primary" @click="onLeave">
-            Leave
-          </button>
-          <button type="button" class="btn btn-primary" @click="onCapture">
-            Capture Photo
-          </button>
-          <button type="button" class="btn btn-primary" @click="onShareScreen">
-            Share Screen
-          </button>
-          <div class="">
-            <h2>Captured Image</h2>
-            <figure class="figure">
-              <img :src="img" class="img-responsive" />
-            </figure>
-          </div>
-        </div>
+      <div class="col-md-7" style="min-height: 96vh">
+        <b-card no-body class="h-100">
+          <b-tabs pills card vertical class="h-100" style="min-height: 100vh">
+            <b-tab title="Slides" active>
+              <Slider :source="''"></Slider>
+            </b-tab>
+            <b-tab title="Storage">
+              <Storage></Storage>
+            </b-tab>
+            <b-tab title="Sketch"
+              ><b-card-text>Tab contents 3</b-card-text></b-tab
+            >
+          </b-tabs>
+        </b-card>
       </div>
       <div class="col-md-5">
-        <b-card>
-          <b-container fluid>
-            <b-row
-              class="overflow-auto flex-column flex-nowrap"
-              style="height: 80vh"
-            >
-              <div
-                class=""
-                v-for="item in this.Session.SessionMessage"
-                v-bind:key="item._id"
-              >
-                <b-card
-                  v-if="item.MessageSender === 'user'"
-                  bg-variant="info"
-                  text-variant="white"
-                  class="my-2"
-                >
-                  <p>{{ item.MessageValue }}</p>
-                </b-card>
-                <b-card
-                  v-if="item.MessageSender === 'mentor'"
-                  bg-variant="primary"
-                  text-variant="white"
-                  class="my-2"
-                >
-                  <p>{{ item.MessageValue }}</p>
-                </b-card>
-              </div>
-            </b-row>
-            <b-row class="">
-              <div class="d-flex m-3">
-                <b-input v-model="msgsend"></b-input>
-                <b-button variant="primary" @click="sendMsgBtn">send</b-button>
-              </div>
-            </b-row>
-          </b-container>
+        <div class="mb-2 h-25">
+          <vidchat></vidchat>
+        </div>
+        <b-card no-body>
+          <chat></chat>
         </b-card>
       </div>
     </div>
@@ -80,64 +29,43 @@
 </template>
 
 <script>
-import { WebRTC } from "vue-webrtc";
+import Slider from "../../components/widgets/room/slider.vue";
+import Storage from "../../components/widgets/room/storage.vue";
+import vidchat from "../../components/widgets/room/vidchat.vue";
+import chat from "../../components/widgets/room/chat.vue";
+
 import { mapGetters } from "vuex";
 import _ from "lodash";
 import router from "../../router/index";
 export default {
   name: "demo",
   components: {
-    WebRTC,
+    Slider,
+    Storage,
+    vidchat,
+    chat,
   },
   data() {
     return {
-      img: null,
-      roomId: "",
-      msgsend: "",
+      roomId: null,
     };
+  },
+  sockets: {
+    FILE_UPLOADED(data) {
+      console.log("file uploaded", data);
+    },
   },
   mounted: function () {
     console.log(this.Session);
     if (_.isEmpty(this.Session)) {
-      console.log("no session redirect to prepare");
       router.push({ name: "mentorDashboard" });
-    } else {
-      this.roomId = this.Session._id;
-      this.$socket.client.emit("join", { session: this.roomId });
     }
+    this.roomId = this.Session.SessionId;
+    console.log(this.roomId);
+    this.$socket.client.emit("join", { session: this.roomId });
   },
   computed: {
-    ...mapGetters(["Session","Mentor"]),
-  },
-  watch: {},
-  methods: {
-    onCapture() {
-      this.img = this.$refs.webrtc.capture();
-    },
-    onJoin() {
-      this.$refs.webrtc.join();
-    },
-    onLeave() {
-      this.$refs.webrtc.leave();
-    },
-    onShareScreen() {
-      this.img = this.$refs.webrtc.shareScreen();
-    },
-    onError(error, stream) {
-      console.log("On Error Event", error, stream);
-    },
-    logEvent(event) {
-      console.log("Event : ", event);
-    },
-        sendMsgBtn() {
-      console.log("ddd");
-      this.$socket.client.emit("SEND_MESSAGE", {
-        from: "mentor",
-        senderId: this.Mentor._id,
-        sessionId: this.roomId,
-        value: this.msgsend,
-      });
-    },
+    ...mapGetters(["Session"]),
   },
 };
 </script>

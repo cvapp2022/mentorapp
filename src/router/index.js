@@ -5,10 +5,11 @@ import VueCookie from 'vue-cookies';
 import _ from 'lodash';
 import store from '../store/index'
 
-import Home from '../views/Home.vue'
-
 
 import { mentorRoutes } from './mentorRoutes'
+function lazyLoad(view){
+  return() => import(`@/views/${view}.vue`)
+} 
 
 Vue.use(VueRouter)
 
@@ -17,7 +18,7 @@ const mainroutes = [
   {
     path: '/',
     name: 'home',
-    component: Home
+    component: lazyLoad('home')
   },
 
 ]
@@ -57,6 +58,10 @@ router.beforeEach((to, from, next) => {
 
   //mentor guard end
 
+    //when move from classroom clear session
+    if(from.name ==='mentorMeetRoom'){
+      store.dispatch('clearSession')    
+    }
 
   next()
 
