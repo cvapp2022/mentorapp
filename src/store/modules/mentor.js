@@ -87,6 +87,7 @@ const actions = {
 const mutations = {
     Mentor: (state, Mentor) => (state.Mentor = Mentor),
     Notification:(state, Notification) => (state.Notification = Notification),
+    NOTIFICATION_SENT_TO_MENTOR:(state,Notification)=>(state.Notification.push(Notification)),
     MentorToken: (state, MentorToken) => (state.MentorToken = MentorToken),
 }
 
