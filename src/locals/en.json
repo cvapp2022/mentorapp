@@ -1,0 +1,23 @@
+{
+    "Save":"Save",
+    "Edit":"Edit",
+    "Delete":"Delete",
+    "Update":"Update",
+    "Cancel":"Cancel",
+    "Preview":"Preview",
+    "DownloadPdf":"Download As PDF",
+
+    "login":"login",
+    "register":"register",
+    "dashboard":"Dashboard",
+
+    "dashboardTitle":"Your Dashboard ",
+    "dashboardDesc":"lorem Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore sapiente inventore autem, suscipit obcaecati ex laboriosam et",
+    
+    "requestTitle":"Your Mentorship requests",
+    "requestDesc":"lorem Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore sapiente inventore autem, suscipit obcaecati ex laboriosam et",
+
+    "notifMentorAddedToProgram":"your account Added to {programName} mentorship program",
+    "notifMentorRemovedFromProgram":"your account Removed From {programName} mentorship program"
+
+}

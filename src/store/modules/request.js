@@ -19,11 +19,11 @@ const actions = {
         //get mentor data 
         var url = process.env.VUE_APP_BASEURL + '/Mn/Request/mentor';
         axios.get(url).then((resp) => {
-
             if (resp.data.success) {
+
+                //push requests 
                 commit('Requests', resp.data.payload);
             }
-
         })
 
     },
@@ -38,34 +38,34 @@ const actions = {
 
         var url = process.env.VUE_APP_BASEURL + '/Mn/Request/' + reqId + '/apply';
         axios.put(url).then((resp) => {
-
             if (resp.data.success) {
+
+                //apply request 
+                console.log(resp.data.payload)
                 dispatch("getRequests")
             }
         })
 
     },
 
-    sceduleMeet({dispatch},data){
+    sceduleMeet({ dispatch }, data) {
 
-        var url = process.env.VUE_APP_BASEURL + '/Mn/Meet/'+data.MeetIdI ;
-        axios.put(url,data).then((resp) => {
+        var url = process.env.VUE_APP_BASEURL + '/Mn/Meet/' + data.MeetIdI;
+        axios.put(url, data).then((resp) => {
 
-            if(resp.data.success){
+            if (resp.data.success) {
                 dispatch("getRequests")
 
             }
-
-
-         })
+        })
     },
-    socket_mentorAddedToProgram({dispatch}){
+    socket_mentorAddedToProgram({ dispatch }) {
         //MENTOR_ADDED_TO_PROGRAM
         console.log('mentor addedd to prgram')
         dispatch('getRequests')
 
     },
-    socket_mentorRemovedFromProgram({dispatch}){
+    socket_mentorRemovedFromProgram({ dispatch }) {
         console.log('mentor removed from program')
         dispatch('getRequests')
     }

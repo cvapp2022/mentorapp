@@ -78,7 +78,7 @@ export default {
         if (!groups[date]) {
           groups[date] = [];
         }
-        if(!usedDatesArr.includes(new Date(slot.date).getTime()) ){
+        if(!usedDatesArr.includes(new Date(slot.date).getTime()) && new Date(slot.date) > new Date().getTime() ){
           groups[date].push({ date: new Date(slot.date) });
         }
         return groups;
@@ -111,14 +111,14 @@ export default {
       return result[datesIndex];
     },
     async nextDate() {
-      this.loading = true;
-      this.dateGroupIndex = this.dateGroupIndex + 1;
+      //this.loading = true;
+      //this.dateGroupIndex = this.dateGroupIndex + 1;
       this.meetingsDays = await this.formatDates(this.dateGroupIndex);
+      console.log(this.meetingsDays)
       // hide loading
-      this.date = this.meetingsDays[this.meetingsDays.length - 1].date;
-      console.log(this.meetingsDays.length);
-      this.date = this.meetingsDays[0].date;
-      this.loading = false;
+      // this.date = this.meetingsDays[this.meetingsDays.length - 1].date;
+      // this.date = this.meetingsDays[0].date;
+      //this.loading = false;
     },
     async previousDate() {
       // display loading

@@ -10,9 +10,10 @@
             <b-tab title="Storage">
               <Storage></Storage>
             </b-tab>
-            <b-tab title="Sketch"
-              ><b-card-text>Tab contents 3</b-card-text></b-tab
-            >
+            <b-tab title="Sketch">
+              <b-card-text>Tab contents 3</b-card-text>
+              <b-button variant="primary" @click="closeSession()" >Close Session</b-button>
+              </b-tab>
           </b-tabs>
         </b-card>
       </div>
@@ -34,7 +35,7 @@ import Storage from "../../components/widgets/room/storage.vue";
 import vidchat from "../../components/widgets/room/vidchat.vue";
 import chat from "../../components/widgets/room/chat.vue";
 
-import { mapGetters } from "vuex";
+import { mapGetters,mapActions } from "vuex";
 import _ from "lodash";
 import router from "../../router/index";
 export default {
@@ -50,9 +51,18 @@ export default {
       roomId: null,
     };
   },
+  methods:{
+    ...mapActions(['clearSession']),
+    closeSession(){
+      this.$socket.client.emit("CLOSE_SESSION", { session: this.roomId });
+    }
+  },
   sockets: {
     FILE_UPLOADED(data) {
       console.log("file uploaded", data);
+    },
+    MENTOR_JOINED() {
+      this.$socket.client.emit("join", { session: this.roomId });
     },
   },
   mounted: function () {
@@ -66,6 +76,10 @@ export default {
   },
   computed: {
     ...mapGetters(["Session"]),
+  },
+  beforeDestroy() {
+    this.$socket.client.emit("leave", { session: this.roomId });
+    this.clearSession();
   },
 };
 </script>

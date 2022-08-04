@@ -1,0 +1,20 @@
+{
+    "Save":"حفظ",
+    "Edit":"تعديل",
+    "Delete":"إزالة",
+    "Update":"تعديل",
+    "Cancel":"إلغاء",
+    "Preview":"عرض",
+    "DownloadPdf":"تحميل كا PDF",
+    
+    "login":"تسجيل الدخول",
+    "register":"إنشاء حساب جديد",
+    "dashboard":"الرئيسية",
+
+    "dashboardTitle":"الصفحة الرئيسية",
+    "dashboardDesc":" شرح مطول عن الصفحة الرئيسية",
+  
+    "notifMentorAddedToProgram":"{programName} تم إضافة حسابك لبرنامج المنحة ",
+    "notifMentorRemovedFromProgram":"{programName} تم ازالة حسابك لبرنامج المنحة "
+
+}

@@ -104,7 +104,7 @@ export default {
   },
   mounted() {
     this.uploadUrl =
-      "http://127.0.0.1:5000/api/v1/Mn/Session/" + this.Session._id + "/upload";
+      process.env.VUE_APP_BASEURL+"/Mn/Session/" + this.Session._id + "/upload";
     this.uploadHeaders = { authorization: "bearer " + this.MentorToken };
   },
 };

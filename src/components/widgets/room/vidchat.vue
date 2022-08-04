@@ -4,7 +4,7 @@
       ref="webrtc"
       width="100%"
       :roomId="roomId"
-      :socketURL="'http://127.0.0.1:5000'"
+      :socketURL="''+process.env.VUE_APP_URL"
       :enableLogs="true"
       v-on:joined-room="logEvent"
       v-on:left-room="logEvent"
@@ -70,7 +70,18 @@ export default {
   },
   mounted() {
     this.roomId = this.Session._id;
-    //this.onJoin()
+    this.onJoin();
+  },
+  sockets: {
+    MENTOR_JOINED() {
+      this.onJoin();
+    },
+    disconnect() {
+      this.onLeave();
+    },
+  },
+  beforeDestroy() {
+    this.onLeave();
   },
 };
 </script>
