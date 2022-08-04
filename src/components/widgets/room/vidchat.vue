@@ -4,7 +4,7 @@
       ref="webrtc"
       width="100%"
       :roomId="roomId"
-      :socketURL="''+process.env.VUE_APP_URL"
+      :socketURL="''+$baseUrl"
       :enableLogs="true"
       v-on:joined-room="logEvent"
       v-on:left-room="logEvent"

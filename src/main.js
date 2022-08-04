@@ -38,6 +38,8 @@ Vue.use(VueSocketIO,ioInstance,{ store })
 
 Vue.config.productionTip = false
 
+Vue.prototype.$baseUrl = process.env.VUE_APP_URL;
+
 new Vue({
   router,
   store,
